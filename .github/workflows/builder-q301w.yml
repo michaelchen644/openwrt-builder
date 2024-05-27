@@ -1,0 +1,175 @@
+
+name: Builder for Q301W
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+
+env:
+  REPO_URL: https://github.com/michaelchen644/openwrt
+  REPO_BRANCH: qualcommax-6.x-nss-dev
+  FEEDS_CONF: feeds.conf.default
+  UPLOAD_BIN_DIR: false
+  UPLOAD_FIRMWARE: true
+  UPLOAD_RELEASE: true
+  TZ: Asia/Shanghai
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@main
+
+    - name: Initialization environment
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo rm -rf /usr/share/dotnet/
+        sudo rm -rf /usr/local/graalvm/
+        sudo rm -rf /usr/local/.ghcup/
+        sudo rm -rf /usr/local/share/powershell
+        sudo rm -rf /usr/local/share/chromium
+        sudo rm -rf /usr/local/lib/android
+        sudo rm -rf /usr/local/lib/node_modules
+        df -h
+        sudo docker image prune --all --force
+        sudo -E apt update
+        sudo -E apt remove needrestart
+        sudo -E apt install build-essential clang flex bison g++ gawk gcc-multilib g++-multilib gettext git libncurses5-dev libssl-dev python3-setuptools rsync swig unzip zlib1g-dev file wget
+        sudo -E apt autoremove --purge
+        sudo -E apt clean
+        sudo timedatectl set-timezone "$TZ"
+        sudo mkdir -p /workdir
+        sudo chown $USER:$GROUPS /workdir
+
+    - name: Clone source code
+      working-directory: /workdir
+      run: |
+        df -hT $PWD
+        git clone $REPO_URL -b $REPO_BRANCH openwrt
+        ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+
+    - name: Load custom feeds
+      env:
+        TOKEN: ${{ secrets.ALL_ACCESS }}
+      run: |
+        [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
+        cd openwrt
+        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/targets/q301w/diy-part1-q301w.sh | sh
+
+    - name: Update feeds
+      run: cd openwrt && ./scripts/feeds update -a
+
+    - name: Install feeds
+      run: cd openwrt && ./scripts/feeds install -a
+
+    - name: Load custom configuration
+      env:
+        TOKEN: ${{ secrets.ALL_ACCESS }}
+      run: |
+        [ -e files ] && mv files openwrt/files
+        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/targets/q301w/diffconfig-q301w-qosmio-0522 -o openwrt/.config
+        cd openwrt
+        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/targets/q301w/diy-part2-q301w.sh | sh
+
+    - name: Copy custom configuration files
+      env:
+        TOKEN: ${{ secrets.ALL_ACCESS }}
+      run: |
+        mkdir -p openwrt/feeds/luci/modules/luci-mod-status/patches
+        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/common/0001-nss-core-status.patch -o openwrt/feeds/luci/modules/luci-mod-status/patches/0001-nss-core-status.patch
+        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/common/29_ports.js -o openwrt/feeds/luci/modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js
+        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/mw3config/mwan3-q301w -o openwrt/feeds/packages/net/mwan3/files/etc/config/mwan3
+        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/opcconfig/openclash-ax3600 -o openwrt/package/michael/luci-app-openclash/root/etc/config/openclash
+        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/common/adgconfig/AdGuardHome_mc.yaml -o openwrt/package/base-files/files/etc/adguardhome.yaml
+        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/targets/q301w/999-zzz-init-set-q301w -o openwrt/package/base-files/files/etc/uci-defaults/999-zzz-init-set-q301w
+
+    - name: Download package
+      id: package
+      run: |
+        cd openwrt
+        make defconfig
+        make -j$(nproc) download
+        find dl -size -1024c -exec ls -l {} \;
+        find dl -size -1024c -exec rm -f {} \;
+        make -j1 download
+
+    - name: Prepare to compile
+      run: |
+        cd openwrt
+        echo -e "$(nproc) thread compile"
+        make -j$(nproc) prepare || make -j$(nproc) prepare || make -j1 prepare || make -j1 prepare V=s || return 0
+
+    - name: Compile the firmware
+      id: compile
+      run: |
+        cd openwrt
+        echo -e "$(nproc) thread compile"
+        make -j$(nproc) || make -j$(nproc) || make -j1 || make -j1 V=s
+        echo "status=success" >> $GITHUB_OUTPUT
+        grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
+        [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
+        echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
+
+    - name: Check space usage
+      if: (!cancelled())
+      run: df -hT
+
+    - name: Upload bin directory
+      uses: actions/upload-artifact@main
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
+      with:
+        name: OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+        path: openwrt/bin
+
+    - name: Organize files
+      id: organize
+      if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+      run: |
+        cd openwrt/bin/targets/*/*
+        rm -rf packages
+        echo "FIRMWARE=$PWD" >> $GITHUB_ENV
+        echo "status=success" >> $GITHUB_OUTPUT
+
+    - name: Upload firmware directory
+      uses: actions/upload-artifact@main
+      if: steps.organize.outputs.status == 'success' && !cancelled()
+      with:
+        name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+        path: ${{ env.FIRMWARE }}
+
+    - name: Generate release tag
+      id: tag
+      if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+      run: |
+        echo "release_tag=$(date +"%Y.%m.%d-%H%M")" >> $GITHUB_OUTPUT
+        touch release.txt
+        [ ${UPLOAD_GOFILE} = true && ${{ steps.gofile.outputs.url }} ] && echo "馃敆 [GoFile](${{ steps.gofile.outputs.url }})" >> release.txt
+        echo "status=success" >> $GITHUB_OUTPUT
+
+    - name: Upload firmware to release
+      uses: softprops/action-gh-release@master
+      if: steps.tag.outputs.status == 'success' && !cancelled()
+      env:
+        GITHUB_TOKEN: ${{ secrets.ALL_ACCESS }}
+      with:
+        tag_name: ${{ steps.tag.outputs.release_tag }}
+        body_path: release.txt
+        files: ${{ env.FIRMWARE }}/*
+
+    - name: Delete workflow runs
+      uses: Mattraks/delete-workflow-runs@main
+      with:
+        retain_days: 0
+        keep_minimum_runs: 2
+
+    - name: Remove old Releases
+      uses: dev-drprasad/delete-older-releases@master
+      if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+      with:
+        keep_latest: 3
+        delete_tags: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.ALL_ACCESS }}

@@ -85,6 +85,7 @@ jobs:
         curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/opcconfig/openclash-ax3600 -o openwrt/package/michael/luci-app-openclash/root/etc/config/openclash
         curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/common/adgconfig/AdGuardHome_mc.yaml -o openwrt/package/base-files/files/etc/adguardhome.yaml
         curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/targets/ax6/999-zzz-init-set-ax6 -o openwrt/package/base-files/files/etc/uci-defaults/999-zzz-init-set-ax6
+        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile//main/michael/opcconfig/michael-ytoo.yaml -o openwrt/package/michael/luci-app-openclash/root/etc/openclash/config/michael-ytoo.yaml
 
     - name: Download package
       id: package

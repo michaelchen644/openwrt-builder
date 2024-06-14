@@ -79,6 +79,8 @@ jobs:
         TOKEN: ${{ secrets.ALL_ACCESS }}
       run: |
         mkdir -p openwrt/feeds/luci/modules/luci-mod-status/patches
+        rm openwrt/feeds/packages/net/nginx-util/files/nginx.config
+        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/ngxconfig/nginx.config -o openwrt/feeds/packages/net/nginx-util/files/nginx.config
         curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/common/0001-nss-core-status.patch -o openwrt/feeds/luci/modules/luci-mod-status/patches/0001-nss-core-status.patch
         curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/common/29_ports.js -o openwrt/feeds/luci/modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js
         curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/mw3config/mwan3-ax3600 -o openwrt/feeds/packages/net/mwan3/files/etc/config/mwan3

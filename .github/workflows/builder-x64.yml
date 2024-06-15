@@ -80,8 +80,8 @@ jobs:
       run: |
         mkdir -p openwrt/package/base-files/files/etc/mycerts
         rm openwrt/feeds/packages/net/nginx-util/files/nginx.config
-        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/mycerts/openwrt.crt -o openwrt/package/base-files/files/etc/mycerts
-        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/mycerts/openwrt.pem -o openwrt/package/base-files/files/etc/mycerts
+        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/mycerts/openwrt.crt -o openwrt/package/base-files/files/etc/mycerts/openwrt.crt
+        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/mycerts/openwrt.pem -o openwrt/package/base-files/files/etc/mycerts/openwrt.pem
         curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/ngxconfig/nginx.config -o openwrt/feeds/packages/net/nginx-util/files/nginx.config
         curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/common/29_ports.js -o openwrt/feeds/luci/modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js
         curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/opcconfig/openclash-x64 -o openwrt/package/michael/luci-app-openclash/root/etc/config/openclash

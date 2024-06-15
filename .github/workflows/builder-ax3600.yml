@@ -70,7 +70,7 @@ jobs:
         TOKEN: ${{ secrets.ALL_ACCESS }}
       run: |
         [ -e files ] && mv files openwrt/files
-        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/targets/ax3600/diffconfig-ax3600-qosmio-0522 -o openwrt/.config
+        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/targets/ax3600/diffconfig-ax3600-qosmio-0601 -o openwrt/.config
         cd openwrt
         curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/targets/ax3600/diy-part2-ax3600.sh | sh
 

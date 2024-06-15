@@ -70,7 +70,7 @@ jobs:
         TOKEN: ${{ secrets.ALL_ACCESS }}
       run: |
         [ -e files ] && mv files openwrt/files
-        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/targets/q301w/diffconfig-q301w-qosmio-0522 -o openwrt/.config
+        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/targets/q301w/diffconfig-q301w-qosmio-0601 -o openwrt/.config
         cd openwrt
         curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/targets/q301w/diy-part2-q301w.sh | sh
 

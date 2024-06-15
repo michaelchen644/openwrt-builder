@@ -85,7 +85,7 @@ jobs:
         curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/common/29_ports.js -o openwrt/feeds/luci/modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js
         curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/mw3config/mwan3-ax3600 -o openwrt/feeds/packages/net/mwan3/files/etc/config/mwan3
         curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/opcconfig/openclash-ax3600 -o openwrt/package/michael/luci-app-openclash/root/etc/config/openclash
-        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/common/adgconfig/AdGuardHome_mc.yaml -o openwrt/package/base-files/files/etc/adguardhome.yaml
+        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/adgconfig/AdGuardHome_mc.yaml -o openwrt/package/base-files/files/etc/adguardhome.yaml
         curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/targets/ax3600/999-zzz-init-set-ax3600 -o openwrt/package/base-files/files/etc/uci-defaults/999-zzz-init-set-ax3600
         curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile//main/michael/opcconfig/michael-ytoo.yaml -o openwrt/package/michael/luci-app-openclash/root/etc/openclash/config/michael-ytoo.yaml
 

@@ -57,7 +57,7 @@ jobs:
       run: |
         [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
         cd openwrt
-        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/targets/x64/diy-part1-x64.sh | sh
+        curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/targets/x64/diy-part1-x64.sh | sh
 
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
@@ -70,9 +70,9 @@ jobs:
         TOKEN: ${{ secrets.ALL_ACCESS }}
       run: |
         [ -e files ] && mv files openwrt/files
-        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/targets/x64/diffconfig-x64-0601 -o openwrt/.config
+        curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/targets/x64/diffconfig-x64-0601 -o openwrt/.config
         cd openwrt
-        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/targets/x64/diy-part2-x64.sh | sh
+        curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/targets/x64/diy-part2-x64.sh | sh
 
     - name: Copy custom configuration files
       env:
@@ -80,14 +80,14 @@ jobs:
       run: |
         mkdir -p openwrt/package/base-files/files/etc/mycerts
         rm openwrt/feeds/packages/net/nginx-util/files/nginx.config
-        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/mycerts/openwrt.crt -o openwrt/package/base-files/files/etc/mycerts/openwrt.crt
-        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/mycerts/openwrt.pem -o openwrt/package/base-files/files/etc/mycerts/openwrt.pem
-        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/ngxconfig/nginx.config -o openwrt/feeds/packages/net/nginx-util/files/nginx.config
-        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/common/29_ports.js -o openwrt/feeds/luci/modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js
-        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/opcconfig/openclash-x64 -o openwrt/package/michael/luci-app-openclash/root/etc/config/openclash
-        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/adgconfig/AdGuardHome_mc.yaml -o openwrt/package/base-files/files/etc/adguardhome.yaml
-        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/targets/x64/999-zzz-init-set-x64 -o openwrt/package/base-files/files/etc/uci-defaults/999-zzz-init-set-x64
-        curl -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile//main/michael/opcconfig/michael-ytoo.yaml -o openwrt/package/michael/luci-app-openclash/root/etc/openclash/config/michael-ytoo.yaml
+        curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/mycerts/openwrt.crt -o openwrt/package/base-files/files/etc/mycerts/openwrt.crt
+        curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/mycerts/openwrt.pem -o openwrt/package/base-files/files/etc/mycerts/openwrt.pem
+        curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/ngxconfig/nginx.config -o openwrt/feeds/packages/net/nginx-util/files/nginx.config
+        curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/common/29_ports.js -o openwrt/feeds/luci/modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js
+        curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/opcconfig/openclash-x64 -o openwrt/package/michael/luci-app-openclash/root/etc/config/openclash
+        curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/adgconfig/AdGuardHome_mc.yaml -o openwrt/package/base-files/files/etc/adguardhome.yaml
+        curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/targets/x64/999-zzz-init-set-x64 -o openwrt/package/base-files/files/etc/uci-defaults/999-zzz-init-set-x64
+        curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile//main/michael/opcconfig/michael-ytoo.yaml -o openwrt/package/michael/luci-app-openclash/root/etc/openclash/config/michael-ytoo.yaml
 
     - name: Download package
       id: package

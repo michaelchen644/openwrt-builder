@@ -1,5 +1,5 @@
 
-name: Builder for AX6
+name: Builder for AX6 YMJ
 
 on:
   repository_dispatch:

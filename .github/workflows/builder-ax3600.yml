@@ -81,11 +81,11 @@ jobs:
         TOKEN: ${{ secrets.ALL_ACCESS }}
       run: |
         mkdir -p openwrt/feeds/luci/modules/luci-mod-status/patches
-        mkdir -p openwrt/package/base-files/files/etc/mycerts
+        mkdir -p openwrt/package/base-files/files/etc/myfiles/certs
         rm openwrt/feeds/packages/net/nginx-util/files/nginx.config
-        curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/mycerts/Michael_Lab_CA.crt -o openwrt/package/base-files/files/etc/mycerts/Michael_Lab_CA.crt
-        curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/mycerts/openwrt.crt -o openwrt/package/base-files/files/etc/mycerts/openwrt.crt
-        curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/mycerts/openwrt.pem -o openwrt/package/base-files/files/etc/mycerts/openwrt.pem
+        curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/mycerts/Michael_Lab_CA.crt -o openwrt/package/base-files/files/etc/myfiles/certs/Michael_Lab_CA.crt
+        curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/mycerts/openwrt.crt -o openwrt/package/base-files/files/etc/myfiles/certs/openwrt.crt
+        curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/mycerts/openwrt.pem -o openwrt/package/base-files/files/etc/myfiles/certs/openwrt.pem
         curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/ngxconfig/nginx.config -o openwrt/feeds/packages/net/nginx-util/files/nginx.config
         curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/common/0001-nss-core-status.patch -o openwrt/feeds/luci/modules/luci-mod-status/patches/0001-nss-core-status.patch
         curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/common/29_ports.js -o openwrt/feeds/luci/modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js

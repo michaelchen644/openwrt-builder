@@ -7,7 +7,7 @@ on:
 
 env:
   REPO_URL: https://github.com/michaelchen644/openwrt
-  REPO_BRANCH: qualcommax-6.x-nss-dev
+  REPO_BRANCH: qualcommax-6.x-nss-AL-0829
   FEEDS_CONF: feeds.conf.default
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
@@ -70,7 +70,7 @@ jobs:
         TOKEN: ${{ secrets.ALL_ACCESS }}
       run: |
         [ -e files ] && mv files openwrt/files
-        curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/targets/ax3600/diffconfig-ax3600-qosmio-0715 -o openwrt/.config
+        curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/targets/ax3600/diffconfig-ax3600-qosmio-0830 -o openwrt/.config
         curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/common/git_success.sh -o openwrt/git_success.sh
         chmod +x openwrt/git_success.sh
         cd openwrt

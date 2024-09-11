@@ -7,7 +7,7 @@ on:
 
 env:
   REPO_URL: https://github.com/michaelchen644/openwrt
-  REPO_BRANCH: qualcommax-6.x-nss-dev
+  REPO_BRANCH: qualcommax-6.x-nss-dev-qm
   FEEDS_CONF: feeds.conf.default
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true

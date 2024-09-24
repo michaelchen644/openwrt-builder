@@ -26,9 +26,9 @@ jobs:
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
-        sudo rm -rf /usr/share/dotnet/
-        sudo rm -rf /usr/local/graalvm/
-        sudo rm -rf /usr/local/.ghcup/
+        sudo rm -rf /usr/share/dotnet
+        sudo rm -rf /usr/local/graalvm
+        sudo rm -rf /usr/local/.ghcup
         sudo rm -rf /usr/local/share/powershell
         sudo rm -rf /usr/local/share/chromium
         sudo rm -rf /usr/local/lib/android
@@ -88,7 +88,7 @@ jobs:
         curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/certs/openwrt.crt -o openwrt/package/base-files/files/etc/myfiles/certs/openwrt.crt
         curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/certs/openwrt.pem -o openwrt/package/base-files/files/etc/myfiles/certs/openwrt.pem
         curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/scripts/workstation-v6.sh -o openwrt/package/base-files/files/etc/myfiles/scripts/workstation-v6.sh
-curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/scripts/sa6400-v6.sh -o openwrt/package/base-files/files/etc/myfiles/scripts/sa6400-v6.sh
+        curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/scripts/sa6400-v6.sh -o openwrt/package/base-files/files/etc/myfiles/scripts/sa6400-v6.sh
         curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/ngxconfig/nginx.config -o openwrt/feeds/packages/net/nginx-util/files/nginx.config
         curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/common/0001-nss-core-status.patch -o openwrt/feeds/luci/modules/luci-mod-status/patches/0001-nss-core-status.patch
         curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/common/29_ports.js -o openwrt/feeds/luci/modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js

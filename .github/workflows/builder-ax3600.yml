@@ -70,7 +70,7 @@ jobs:
         TOKEN: ${{ secrets.ALL_ACCESS }}
       run: |
         [ -e files ] && mv files openwrt/files
-        curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/targets/ax3600/diffconfig-ax3600-qosmio-0925 -o openwrt/.config
+        curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/targets/ax3600/diffconfig-ax3600-qosmio-1105 -o openwrt/.config
         curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/common/git_success.sh -o openwrt/git_success.sh
         chmod +x openwrt/git_success.sh
         cd openwrt

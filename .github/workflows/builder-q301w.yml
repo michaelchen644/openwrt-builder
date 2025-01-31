@@ -84,7 +84,7 @@ jobs:
         mkdir -p openwrt/package/base-files/files/etc/myfiles/certs
         mkdir -p openwrt/package/base-files/files/etc/myfiles/scripts
         rm openwrt/feeds/packages/net/nginx-util/files/nginx.config
-        curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/certs/Michael_Lab_CA.crt -o openwrt/package/base-files/files/etc/myfiles/certs/Michael_Lab_CA.crt
+        curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/certs/Michael_Lab_Root_CA.crt -o openwrt/package/base-files/files/etc/myfiles/certs/Michael_Lab_Root_CA.crt
         curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/certs/openwrt.crt -o openwrt/package/base-files/files/etc/myfiles/certs/openwrt.crt
         curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/certs/openwrt.pem -o openwrt/package/base-files/files/etc/myfiles/certs/openwrt.pem
         curl -fsSL --retry 5 --retry-delay 3 -H "Authorization: token ${TOKEN}" https://raw.githubusercontent.com/michaelchen644/openwrt-compile/main/michael/scripts/workstation-v6.sh -o openwrt/package/base-files/files/etc/myfiles/scripts/workstation-v6.sh
